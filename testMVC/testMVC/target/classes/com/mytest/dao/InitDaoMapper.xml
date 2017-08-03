@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mytest.dao.InitDao">
+	<select id="selectProvince" resultType="Province" >
+		select id,name from province
+	</select>
+	
+	<select id="selectCityByProvincedId" resultType="City">
+		select id,name from city where provinceId = #{provinceId}
+	</select>
+	
+	<select id="selectStreetByCityId" resultType="Street">
+		select id,name from street where cityId = #{cityId}
+	</select>
+	
+	
+</mapper>

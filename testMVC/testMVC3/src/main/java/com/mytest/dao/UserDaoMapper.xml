@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mytest.dao.UserDao">
+	<insert id="addUser" >
+		insert into userinfo (username,password,provinceId,cityId,streetId,birthday) values
+		(#{username},#{password},#{provinceId},#{cityId},#{streetId},#{birthday})
+	</insert>
+	
+	<select id="selectUser" resultType="User">
+		select id,username,password,provinceId,cityId,streetId,birthday from userinfo where username = #{username} and password = #{password}
+	</select>
+	
+	<select id="selectUserInfo" resultType="User">
+		select id,username,password,provinceId,cityId,streetId,birthday from userinfo
+		<include refid="search"/>
+		 order by #{sort} #{order} limit #{start},#{pageSize}
+	</select>
+	
+	<delete id="deleteUserInfo">
+		delete from userinfo where id in 
+		<foreach collection="list" open="(" close=")" separator="," item="item" index="index">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="getUserInfoById" resultType="User">
+		select id,username,password,provinceId,cityId,streetId,birthday from userinfo where id = #{id}
+	</select>
+	
+	<update id="updateUserInfo">
+		update userinfo set username=#{username},password=#{password},provinceId=#{provinceId},cityId=#{cityId},streetId=#{streetId},birthday=#{birthday} where id=#{id}
+	</update>
+	
+	<select id="selectTree" resultType="NavTree">
+		select id,text,state,iconCls,url from nav_tree where nid = #{id}
+	</select>
+	
+	<select id="selectCount" resultType="Integer">
+		select count(id) from userinfo
+	</select>
+	
+	<sql id="search">
+		<where>
+			<if test="search_username!=null and search_username.trim!=''">
+				and username like '%' #{search_username} '%'
+			</if>
+			<if test="birthday_from!=null and birthday_from.trim!=''">
+				and birthday > #{birthday_from}
+			</if>
+			<if test="birthday_to!=null and birthday_to.trim!=''">
+				and #{birthday_to} > birthday
+			</if>
+		</where>
+	</sql>
+</mapper>
